@@ -51,12 +51,12 @@ namespace MiniSchematicEditor.ViewModels
         private ObservableCollection<BlockModel> _blocks = new();
 
         // Выбранный блок
-        public BlockModel SelectedBlock
+        public BlockModel? SelectedBlock
         {
             get => _selectedBlock;
             set => SetProperty(ref _selectedBlock, value, nameof(SelectedBlock));
         }
-        private BlockModel _selectedBlock;
+        private BlockModel? _selectedBlock;
 
         // Имя проекта
         public string ProjectName
@@ -258,6 +258,7 @@ namespace MiniSchematicEditor.ViewModels
                 return;
 
             Blocks.Remove(SelectedBlock);
+            SelectedBlock = null;
         }
 
         /// <summary>
