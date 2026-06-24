@@ -88,21 +88,16 @@ namespace MiniSchematicEditor.ViewModels
                     return;
             }
 
-            InputDialog inputDialog = new InputDialog();
+            string newProjectName = _messageService.ShowInputDialog();
 
-            if(inputDialog.ShowDialog() == true)
+            if (newProjectName != null)
             {
-                if(inputDialog.DataContext is InputDialogViewModel viewModel)
-                {
-                    Blocks.Clear();
-                    SelectedBlock = null;
-                    ProjectName = viewModel.ProjectName;
-                }
+                Blocks.Clear();
+                SelectedBlock = null;
+                ProjectName = newProjectName;
+                isProject = true;
             }
-            else
-                return;
 
-            isProject = true;
         }
 
         /// <summary>
@@ -221,18 +216,8 @@ namespace MiniSchematicEditor.ViewModels
                 return;
 
             var currentNames = Blocks.Select(x => x.Name).ToList();
-
-            AddBlockDialog addBlockDialog = new AddBlockDialog();
-            var viewModel = new AddBlockViewModel(currentNames);
-            addBlockDialog.DataContext = viewModel;
-
-            viewModel.CloseAction = (result) =>
-            {
-                addBlockDialog.DialogResult = result;
-                addBlockDialog.Close();
-            };
-
-            if (addBlockDialog.ShowDialog() == true)
+           
+            if (_messageService.ShowAddBlockDialog(currentNames, out var viewModel))
             {
                 BlockModel newBlock = new BlockModel
                 {
